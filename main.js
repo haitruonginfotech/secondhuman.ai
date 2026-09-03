@@ -901,6 +901,188 @@ function initHowPanelNet() {
   cleanups.push(() => { observer.disconnect(); resizer.disconnect(); if (raf) cancelAnimationFrame(raf); });
 }
 
+function initGrowingLines() {
+  // growing-lines: chạy sau khi DOM mount xong (inline script bị cơ chế
+  // mount của trang nuốt mất nên chuyển vào đây)
+  if (!document.getElementById('growing-lines')) return;
+
+  // ---------- CẤU HÌNH — chỉnh ở đây ----------
+  const CONFIG = {
+    lineColor:   '#e8e8e8',   // màu nét
+    bgColor:     '#000000',   // màu nền
+    lineWidth:   1.2,         // độ dày nét
+    tipRadius:   4.5,         // bán kính hình tròn ở đầu nhánh
+    tipFilled:   false,       // true = tròn đặc, false = tròn rỗng
+    duration:    11,          // tổng thời gian mọc (giây) — nhanh hơn
+    maxNodes:    195,         // dài hơn, phủ ngang -> tự cân giữa
+    seed:        { x: 0.07, y: 0.66 },  // dịch vào để tổng thể cân giữa band
+    loop:        true,        // tự chạy lại sau khi mọc xong
+    pauseAfter:  1.5,         // dừng bao lâu trước khi chạy lại (giây)
+    randomSeed:  7            // đổi số này để ra hình khác; null = ngẫu nhiên mỗi lần
+  };
+  // --------------------------------------------
+
+  const canvas = document.getElementById('growing-lines');
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Bộ sinh số ngẫu nhiên có seed để hình lặp lại giống nhau khi loop
+  function makeRng(seed) {
+    let s = seed == null ? (Math.random() * 1e9) | 0 : seed;
+    return function () {
+      s = (s * 1664525 + 1013904223) >>> 0;
+      return s / 4294967296;
+    };
+  }
+
+  let W = 0, H = 0, dpr = 1;
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  // Mỗi nhánh là một đường cong bezier bậc 2 võng xuống, từ p0 tới p1.
+  // start/end: thời điểm (giây) nhánh bắt đầu và kết thúc mọc.
+  let branches = [];
+  let seedPt = null;
+
+  function build() {
+    const rng = makeRng(CONFIG.randomSeed);
+    const scale = Math.min(W, H * 1.5) / 1000;
+    branches = [];
+    const seed = { x: W * CONFIG.seed.x, y: H * CONFIG.seed.y };
+    seedPt = seed;
+    const queue = [{ p: seed, depth: 0, t: 0, dir: 0 }];
+
+    while (queue.length && branches.length < CONFIG.maxNodes) {
+      // lấy nhánh có thời điểm nhỏ nhất trước (mọc theo thời gian)
+      queue.sort((a, b) => a.t - b.t);
+      const node = queue.shift();
+      const kids = node.depth === 0 ? 3
+                   : (rng() < 0.8 ? 1 : 2); // dây leo: chủ yếu nối tiếp 1 đầu
+
+      for (let i = 0; i < kids; i++) {
+        if (branches.length >= CONFIG.maxNodes) break;
+        // hướng chung: sang phải, hơi chếch lên; càng sâu càng ngắn
+        const len = (40 + rng() * rng() * 95) * scale;
+        const angle = -0.5 + rng() * 0.45 + node.dir * 0.12;        // tip sau cao hơn tip trước một nấc
+        const p1 = {
+          x: node.p.x + Math.cos(angle) * len,
+          y: node.p.y + Math.sin(angle) * len
+        };
+        // giữ trong khung hình
+        p1.x = Math.min(W - 30, Math.max(30, p1.x));
+        p1.y = Math.min(H - 30, Math.max(30, p1.y));
+
+        // điểm điều khiển nằm dưới đoạn nối → đường võng như dây treo
+        const mx = (node.p.x + p1.x) / 2, my = (node.p.y + p1.y) / 2;
+        const sag = ((16 + rng() * rng() * 55) * (rng() < 0.12 ? 3.5 : 1)) * scale;
+        const c = { x: mx + (rng() - 0.5) * 40 * scale, y: my + sag };
+
+        const grow = 0.35 + rng() * 0.7;              // thời gian mọc của nhánh này
+        const start = node.t + rng() * 0.08;
+        const b = { p0: node.p, c, p1, start, end: start + grow, depth: node.depth + 1, sag, phase: rng() * 6.283 };
+        branches.push(b);
+        queue.push({ p: p1, depth: node.depth + 1, t: b.end, dir: (rng() - 0.5) * 2 });
+      }
+    }
+
+    // chuẩn hoá thời gian để toàn bộ mọc xong đúng CONFIG.duration
+    const total = Math.max(...branches.map(b => b.end));
+    const k = CONFIG.duration / total;
+    branches.forEach(b => { b.start *= k; b.end *= k; });
+  }
+
+  function bezierPoint(b, t, c) {
+    const k = c || b.c;
+    const u = 1 - t;
+    return {
+      x: u * u * b.p0.x + 2 * u * t * k.x + t * t * b.p1.x,
+      y: u * u * b.p0.y + 2 * u * t * k.y + t * t * b.p1.y
+    };
+  }
+
+  function drawBranch(b, progress, wall) {
+    // vẽ phần đường cong từ 0 → progress bằng cách chia nhỏ
+    const steps = Math.max(2, Math.ceil(40 * progress));
+    const swayAmp = 4 + (b.sag || 0) * 0.16;
+    const c = {
+      x: b.c.x + Math.sin(wall * 1.1 + b.phase) * swayAmp * 0.55,
+      y: b.c.y + Math.cos(wall * 0.8 + b.phase) * swayAmp,
+    };
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(b.p0.x, b.p0.y);
+    for (let i = 1; i <= steps; i++) {
+      const pt = bezierPoint(b, (i / steps) * progress, c);
+      ctx.lineTo(pt.x, pt.y);
+    }
+    ctx.stroke();
+
+    // hình tròn ở đầu nhánh, theo đầu đường đang mọc
+    const tip = bezierPoint(b, progress, c);
+    ctx.beginPath();
+    ctx.arc(tip.x, tip.y, CONFIG.tipRadius, 0, Math.PI * 2);
+    if (CONFIG.tipFilled) ctx.fill(); else ctx.stroke();
+  }
+
+  const easeOut = t => 1 - Math.pow(1 - t, 2.2);
+
+  function render(time, wall) {
+    ctx.fillStyle = CONFIG.bgColor;
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = CONFIG.lineColor;
+    ctx.fillStyle = CONFIG.lineColor;
+    ctx.lineWidth = CONFIG.lineWidth;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    for (const b of branches) {
+      if (time < b.start) continue;
+      const raw = Math.min(1, (time - b.start) / (b.end - b.start));
+      drawBranch(b, easeOut(raw), wall || 0);
+    }
+    if (seedPt) {
+      ctx.beginPath();
+      ctx.arc(seedPt.x, seedPt.y, CONFIG.tipRadius, 0, Math.PI * 2);
+      if (CONFIG.tipFilled) ctx.fill(); else ctx.stroke();
+    }
+  }
+
+  let t0 = null;
+  function frame(now) {
+    if (t0 === null) t0 = now;
+    let t = (now - t0) / 1000;
+    const cycle = CONFIG.duration + CONFIG.pauseAfter;
+    if (CONFIG.loop && t > cycle) { t0 = now; t = 0; }
+    // cong nhẹ thời gian để phần đầu mọc nhanh hơn
+    const u = Math.min(t, CONFIG.duration) / CONFIG.duration;
+    render(Math.pow(u, 0.8) * CONFIG.duration, now / 1000); // wall clock cho sway, không reset khi loop
+    requestAnimationFrame(frame);
+  }
+
+  function init() {
+    resize();
+    build();
+    if (reduceMotion) { render(CONFIG.duration, 0); return; }  // người dùng tắt animation → hiện hình hoàn chỉnh
+    t0 = null;
+    requestAnimationFrame(frame);
+  }
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { resize(); build(); t0 = null; }, 150);
+  });
+
+  init();
+
+}
+
 function initDeferredLoops() {
   // CSS keyframe loops that should start from frame 0 when they scroll into
   // view, not run invisibly from page load.
@@ -941,7 +1123,7 @@ function initReveals() {
 }
 
 async function init() {
-  initShell(); initWhoTilt(); initStackTilt(); initStackLabelHover(); initStackLoopReveal(); initWhoDotRoulette(); initCardTilt(); initSpotlights(); await initPullApart(); initHow(); initHowPanelNet(); initReveals(); initDeferredLoops();
+  initShell(); initWhoTilt(); initStackTilt(); initStackLabelHover(); initStackLoopReveal(); initWhoDotRoulette(); initCardTilt(); initSpotlights(); await initPullApart(); initHow(); initHowPanelNet(); initReveals(); initDeferredLoops(); initGrowingLines();
   requestAnimationFrame(() => ScrollTrigger.refresh());
 }
 window.addEventListener('pagehide', () => cleanups.forEach((cleanup) => cleanup()), { once: true });

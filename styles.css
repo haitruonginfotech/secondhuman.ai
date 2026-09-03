@@ -2386,7 +2386,7 @@ main section[id] {
 .sec-shape,
 .sec-trace,
 .sec-icon {
-  animation-duration: 12s;
+  animation-duration: 5.5s;
   animation-timing-function: cubic-bezier(0.34, 1.32, 0.4, 1);
   animation-iteration-count: infinite;
 }
@@ -2452,7 +2452,7 @@ main section[id] {
   stroke: #6ea3ff;
   stroke-width: 1.4;
   opacity: 0;
-  animation: sec-burst 12s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  animation: sec-burst 5.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3589,26 +3589,7 @@ body.back-to-top-visible #back-to-top-button {
 }
 
 
-/* 1/9: giảm khoảng đen giữa Best-in-Business và Why section */
-.why {
-  padding-top: 80px;
-}
 
-@media (max-width: 1024px) {
-  .why {
-    padding-top: 60px;
-  }
-}
-
-@media (max-width: 767px) {
-  .why {
-    padding-top: 40px;
-  }
-}
-
-.section.stack {
-  padding-bottom: 36px;
-}
 
 
 /* 1/9: bỏ khoảng rỗng giữa title và mô tả trong own-card — text đi liền
@@ -3621,4 +3602,37 @@ body.back-to-top-visible #back-to-top-button {
 
 .own-card--models {
   min-height: 150px;
+}
+
+
+/* 1/9: chuẩn hoá padding section: 80 / 60 / 40 */
+.section {
+  padding: 80px 0;
+}
+
+@media (max-width: 1024px) {
+  .section {
+    padding: 60px 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding: 40px 0;
+  }
+}
+
+
+/* 1/9: nền band đồng màu với canvas (#000) — hết 2 dải xám hai bên */
+.why__media {
+  background: #000;
+}
+
+/* 1/9: growing-lines canvas thay video ở band Why — thu vào giữa band */
+.why__media #growing-lines {
+  display: block;
+  width: min(1240px, 92%);
+  height: 100%;
+  margin-inline: auto;
+  background: #000;
 }

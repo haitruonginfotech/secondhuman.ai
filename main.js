@@ -1054,6 +1054,8 @@ function initGrowingLines() {
   }
 
   let t0 = null;
+  let raf = null;
+  let inView = false;
   function frame(now) {
     if (t0 === null) t0 = now;
     let t = (now - t0) / 1000;
@@ -1062,21 +1064,44 @@ function initGrowingLines() {
     // cong nhẹ thời gian để phần đầu mọc nhanh hơn
     const u = Math.min(t, CONFIG.duration) / CONFIG.duration;
     render(Math.pow(u, 0.8) * CONFIG.duration, now / 1000); // wall clock cho sway, không reset khi loop
-    requestAnimationFrame(frame);
+    raf = requestAnimationFrame(frame);
+  }
+
+  // Chỉ chạy khi section cuộn vào tầm nhìn; mỗi lần vào lại → chạy lại từ đầu.
+  function start() {
+    if (raf) cancelAnimationFrame(raf);
+    t0 = null;
+    raf = requestAnimationFrame(frame);
+  }
+  function stop() {
+    if (raf) cancelAnimationFrame(raf);
+    raf = null;
+    render(0, 0); // về khung đầu (chỉ hạt giống) để lần vào sau mọc lại từ 0
   }
 
   function init() {
     resize();
     build();
     if (reduceMotion) { render(CONFIG.duration, 0); return; }  // người dùng tắt animation → hiện hình hoàn chỉnh
-    t0 = null;
-    requestAnimationFrame(frame);
+    render(0, 0);
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) { if (!inView) { inView = true; start(); } }
+        else if (inView) { inView = false; stop(); }
+      });
+    }, { threshold: 0.35 });
+    io.observe(canvas);
+    cleanups.push(() => { io.disconnect(); if (raf) cancelAnimationFrame(raf); });
   }
 
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { resize(); build(); t0 = null; }, 150);
+    resizeTimer = setTimeout(() => {
+      resize(); build();
+      if (reduceMotion) { render(CONFIG.duration, 0); return; }
+      if (inView) start(); else render(0, 0);
+    }, 150);
   });
 
   init();

@@ -1,0 +1,2785 @@
+:root {
+  color-scheme: dark;
+  --color-primary: #0e1730;
+  --color-primary-soft: #16224a;
+  --color-on-primary: #f2f4f8;
+  --color-secondary: #0a0a0a;
+  --color-on-secondary: #eceef2;
+  --color-accent: #2979ff;
+  --color-cta: #1f6ef2;
+  --color-cta-hover: #1a5fd4;
+  --color-on-accent: #ffffff;
+  --color-text: #c6cbd4;
+  --color-surface: #10131c;
+  --color-surface-raised: #171c2a;
+  --color-border: rgb(255 255 255 / 0.12);
+  --color-muted: #8a8d94;
+  --container: 1240px;
+  --gutter: clamp(20px, 4vw, 56px);
+  --radius: 16px;
+  --header-height: 72px;
+  --mobile-navigation-bar-height: 0px;
+  --floating-action-right: 25px;
+  --floating-action-bottom: 25px;
+  --whatsapp-size: 48px;
+  --back-to-top-size: 40px;
+  --floating-gap: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-secondary);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  overflow-x: clip;
+  color: var(--color-text);
+  background: var(--color-secondary);
+  font-family: Inter, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.drawer-open {
+  overflow: hidden;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+svg,
+canvas {
+  display: block;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3,
+.button {
+  font-family: "Space Grotesk", Arial, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-on-secondary);
+  text-wrap: balance;
+}
+
+h1 {
+  margin-bottom: 24px;
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+h2 {
+  margin-bottom: 24px;
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+h3 {
+  margin-bottom: 14px;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+}
+
+p {
+  line-height: 1.65;
+}
+
+.container {
+  width: min(var(--container), calc(100% - (var(--gutter) * 2)));
+  margin-inline: auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  padding: 10px 14px;
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  border-radius: 8px;
+  transform: translateY(-150%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 80;
+  height: var(--header-height);
+  border-bottom: 1px solid transparent;
+  background: rgb(10 10 10 / 0);
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.site-header[data-scrolled="true"] {
+  border-color: var(--color-border);
+  background: rgb(14 23 48 / 0.92);
+  box-shadow: 0 16px 35px rgb(2 5 16 / 0.26);
+  backdrop-filter: blur(14px);
+}
+
+.site-header__inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  width: min(1400px, calc(100% - 48px));
+  height: 100%;
+  margin-inline: auto;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.wordmark img {
+  display: block;
+  width: auto;
+  height: 22px;
+}
+
+.wordmark--footer {
+  margin-bottom: 16px;
+}
+
+.wordmark--footer img {
+  height: 26px;
+}
+
+@media (max-width: 767px) {
+  .wordmark img {
+    height: 20px;
+  }
+
+  .wordmark--footer img {
+    height: 22px;
+  }
+}
+
+.desktop-nav {
+  display: flex;
+  justify-content: center;
+  gap: clamp(22px, 2.6vw, 42px);
+}
+
+.desktop-nav a,
+.site-footer a {
+  color: var(--color-text);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.desktop-nav a:hover,
+.site-footer a:hover {
+  color: var(--color-on-secondary);
+}
+
+[aria-disabled="true"] {
+  cursor: default;
+}
+
+.button {
+  --button-shine-streak: rgb(255 255 255 / 0.42);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 24px;
+  color: var(--color-on-accent);
+  background: var(--color-cta);
+  border: 1px solid var(--color-cta);
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.button:hover,
+.button:focus-visible {
+  background: var(--color-cta-hover);
+  border-color: var(--color-cta-hover);
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.button--small {
+  min-height: 42px;
+  padding-inline: 18px;
+  font-size: 13px;
+}
+
+.button-shine {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.button-shine > span,
+.button-shine > svg {
+  position: relative;
+  z-index: 1;
+}
+
+.button-shine::after {
+  position: absolute;
+  top: 0;
+  left: -200%;
+  z-index: 0;
+  width: 200%;
+  height: 100%;
+  background-image: linear-gradient(to right, transparent, var(--button-shine-streak), transparent);
+  transform: skewX(-20deg);
+  pointer-events: none;
+  content: "";
+}
+
+.button-shine:hover::after,
+.button-shine:focus-visible::after {
+  animation: btn-shine 1.2s ease 0.1s;
+}
+
+@keyframes btn-shine {
+  to { left: 200%; }
+}
+
+.menu-toggle,
+.drawer-close {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--color-on-secondary);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.menu-toggle svg,
+.drawer-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mobile-drawer {
+  position: fixed;
+  inset-block: 0;
+  left: 0;
+  z-index: 101;
+  width: min(380px, 88vw);
+  padding: 24px;
+  background: var(--color-primary);
+  border-right: 1px solid var(--color-border);
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-drawer[data-state="open"] {
+  transform: translateX(0);
+}
+
+.mobile-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 48px;
+}
+
+.mobile-drawer nav {
+  display: grid;
+  margin-bottom: 32px;
+}
+
+.mobile-drawer nav a {
+  padding: 18px 0;
+  color: var(--color-on-primary);
+  border-bottom: 1px solid var(--color-border);
+  font-family: "Space Grotesk", Arial, sans-serif;
+  font-size: 24px;
+  text-decoration: none;
+}
+
+.drawer-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgb(0 0 0 / 0.68);
+  backdrop-filter: blur(3px);
+}
+
+.eyebrow {
+  margin-bottom: 22px;
+  color: var(--color-accent);
+  font-family: "IBM Plex Mono", Consolas, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+main section[id] {
+  scroll-margin-top: var(--header-height);
+}
+
+.section {
+  position: relative;
+  padding: clamp(104px, 11vw, 176px) 0;
+}
+
+.section--navy {
+  color: var(--color-text);
+  background: var(--color-primary);
+}
+
+/* #2979FF reads 4.45:1 on navy — one step lighter keeps eyebrows above 4.5. */
+.section--navy .eyebrow {
+  color: #3d85ff;
+}
+
+.section--navy h2,
+.section--navy h3 {
+  color: var(--color-on-primary);
+}
+
+.pull-apart {
+  position: relative;
+  height: 260vh; /* 29/8: rút ngắn scroll — ra hình khối nhanh hơn */
+  min-height: 1100px;
+  background: #08090c;
+}
+
+.pull-apart__stage {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  min-height: 620px;
+  overflow: hidden;
+  background: #08090c;
+}
+
+.pull-apart__stage.is-globe {
+  cursor: grab;
+}
+
+.pull-apart__stage.is-globe.is-grabbing {
+  cursor: grabbing;
+}
+
+.pull-apart__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+}
+
+.pull-apart__copy {
+  position: absolute;
+  top: max(14vh, calc(var(--header-height) + 40px));
+  left: 50%;
+  z-index: 3;
+  width: min(980px, calc(100% - 48px));
+  text-align: center;
+  transform: translate3d(-50%, 0, 0);
+  transform-origin: 50% 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.pull-apart__copy h1,
+.pull-apart__next-copy h2 {
+  margin: 0;
+  font-size: clamp(32px, 2.15vw, 42px);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+}
+
+.pull-apart__copy p,
+.pull-apart__next-copy p {
+  max-width: 900px;
+  margin: 10px auto 0;
+  color: rgb(236 238 242 / 0.58);
+  font-size: clamp(16px, 1.05vw, 20px);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+
+.pull-apart__next-copy {
+  position: absolute;
+  bottom: 6.2vh;
+  left: 50%;
+  z-index: 3;
+  width: min(1080px, calc(100% - 48px));
+  text-align: center;
+  opacity: 0;
+  transform: translate3d(-50%, 20px, 0);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.pull-apart__cta {
+  margin-top: 26px;
+}
+
+.pull-apart__next-copy[aria-hidden="false"] .pull-apart__cta {
+  pointer-events: auto;
+}
+
+.pull-apart__fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: none;
+  place-items: center;
+}
+
+/* Draggable label orbit (static-mode stand-in for the WebGL scene) */
+.pf-orbit {
+  position: relative;
+  width: min(820px, 100%);
+  height: 100%;
+  min-height: 430px;
+  overflow: hidden;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pf-orbit.is-dragging {
+  cursor: grabbing;
+}
+
+.pf-orbit__spokes {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke-width: 1;
+  filter: drop-shadow(0 0 3px rgb(143 180 255 / 0.4));
+  pointer-events: none;
+}
+
+.pf-orbit__logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 12;
+  padding: 14px 20px;
+  background: rgb(11 17 32 / 0.92);
+  border: 1px solid rgb(245 247 250 / 0.4);
+  border-radius: 12px;
+  box-shadow: 0 0 42px rgb(83 91 255 / 0.35);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.pf-orbit__logo img {
+  display: block;
+  width: 148px;
+  height: auto;
+}
+
+.pf-node {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  color: rgb(245 247 250 / 0.85);
+  background: rgb(11 17 32 / 0.85);
+  border: 1px solid rgb(245 247 250 / 0.28);
+  border-radius: 999px;
+  font: 500 10px/1.4 "IBM Plex Mono", Consolas, monospace;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.pf-node i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  animation: who-pulse 2.4s ease-in-out infinite;
+}
+
+/* Static mode (now the only mode): one 100dvh screen — heading on top, the
+   draggable label orbit in the middle, bridging copy + CTA at the bottom. */
+.pull-apart[data-mode="static"] {
+  height: auto;
+  min-height: 0;
+}
+
+.pull-apart[data-mode="static"] .pull-apart__stage {
+  display: grid;
+  height: auto;
+  min-height: 100dvh;
+  padding: calc(var(--header-height) + 42px) 0 56px;
+  grid-template-rows: auto minmax(400px, 1fr) auto;
+}
+
+.pull-apart[data-mode="static"] .pull-apart__canvas {
+  display: none;
+}
+
+.pull-apart[data-mode="static"] .pull-apart__copy,
+.pull-apart[data-mode="static"] .pull-apart__next-copy {
+  position: relative;
+  top: auto;
+  bottom: auto;
+  left: auto;
+  grid-row: auto;
+  width: min(980px, calc(100% - 48px));
+  margin-inline: auto;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.pull-apart[data-mode="static"] .pull-apart__fallback {
+  position: relative;
+  inset: auto;
+  display: grid;
+  grid-row: 2;
+  place-items: center;
+  min-height: 400px;
+}
+
+.pf-orbit {
+  min-height: 400px;
+}
+
+.pull-apart__status {
+  position: absolute;
+  right: 20px;
+  bottom: 16px;
+  z-index: 5;
+  margin: 0;
+  color: var(--color-muted);
+  font: 12px/1.4 "IBM Plex Mono", monospace;
+}
+
+.who {
+  --mx: 50%;
+  --my: 50%;
+  padding-top: clamp(128px, 14vw, 210px);
+  overflow: clip;
+}
+
+/* Faint blueprint grid, always on */
+.who::before,
+.security::before,
+.final-cta::before,
+.why::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(41 121 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(41 121 255 / 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Cursor spotlight: brighter grid + glow revealed around the pointer */
+.who::after,
+.security::after,
+.final-cta::after,
+.why::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    radial-gradient(circle 280px at var(--mx) var(--my), rgb(41 121 255 / 0.2) 0%, rgb(41 121 255 / 0.08) 40%, transparent 75%),
+    linear-gradient(rgb(90 150 255 / 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(90 150 255 / 0.35) 1px, transparent 1px);
+  background-size: 100% 100%, 24px 24px, 24px 24px;
+  -webkit-mask-image: radial-gradient(circle 240px at var(--mx) var(--my), rgb(0 0 0) 0%, rgb(0 0 0 / 0.55) 45%, transparent 82%);
+  mask-image: radial-gradient(circle 240px at var(--mx) var(--my), rgb(0 0 0) 0%, rgb(0 0 0 / 0.55) 45%, transparent 82%);
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+
+.who:hover::after,
+.security:hover::after,
+.final-cta:hover::after,
+.why:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .who::after,
+  .security::after,
+  .final-cta::after,
+  .why::after {
+    display: none;
+  }
+}
+
+.who__grid {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  align-items: center;
+  gap: clamp(64px, 9vw, 140px);
+}
+
+.who__copy h2 {
+  max-width: 650px;
+}
+
+.who__copy > p:last-child {
+  max-width: 610px;
+  margin-bottom: 0;
+  font-size: 18px;
+}
+
+.who__visual {
+  position: relative;
+  display: grid;
+  min-height: 520px;
+  place-items: center;
+}
+
+.who__visual {
+  perspective: 900px;
+}
+
+.who__diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 540px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.who__diagram .who-ai {
+  filter: drop-shadow(0 0 16px rgb(83 91 255 / 0.7));
+}
+
+.who-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: who-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes who-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(0.92); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Soft ripple wave expanding out of each dot */
+.who-wave {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: who-wave 2.2s ease-out infinite;
+}
+
+@keyframes who-wave {
+  0% { transform: scale(1); opacity: 0.5; }
+  70%, 100% { transform: scale(2.6); opacity: 0; }
+}
+
+/* Layer-1 node groups circle around their anchor (dot + wave move as one) */
+.who-orbit {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: who-orbit 4.5s linear infinite;
+}
+
+@keyframes who-orbit {
+  0% { transform: translate(0, calc(var(--r, 7px) * -1)); }
+  12.5% { transform: translate(calc(var(--r, 7px) * 0.707), calc(var(--r, 7px) * -0.707)); }
+  25% { transform: translate(var(--r, 7px), 0); }
+  37.5% { transform: translate(calc(var(--r, 7px) * 0.707), calc(var(--r, 7px) * 0.707)); }
+  50% { transform: translate(0, var(--r, 7px)); }
+  62.5% { transform: translate(calc(var(--r, 7px) * -0.707), calc(var(--r, 7px) * 0.707)); }
+  75% { transform: translate(calc(var(--r, 7px) * -1), 0); }
+  87.5% { transform: translate(calc(var(--r, 7px) * -0.707), calc(var(--r, 7px) * -0.707)); }
+  100% { transform: translate(0, calc(var(--r, 7px) * -1)); }
+}
+
+/* Dashes march along the converge lines */
+.who-lines {
+  animation: who-dash 0.2s linear infinite;
+}
+
+@keyframes who-dash {
+  to { stroke-dashoffset: -9; }
+}
+
+.who-travel {
+  offset-rotate: 0deg;
+  animation: who-travel 4.2s linear infinite;
+  opacity: 0;
+  filter: drop-shadow(0 0 6px rgb(143 180 255 / 0.9));
+}
+
+@keyframes who-travel {
+  0% { offset-distance: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .who-dot,
+  .who-orbit,
+  .who-wave,
+  .who-lines,
+  .who-travel {
+    animation: none;
+  }
+
+  .how-stage,
+  .how-panel__dot,
+  .how-panel__dot::before,
+  .how-link,
+  .how-link__pulse,
+  .why-pulse,
+  .why-travel,
+  .why-drift,
+  .why-gen,
+  .why-node {
+    animation: none;
+    opacity: 1;
+    clip-path: none;
+  }
+
+  .how-box {
+    transition: none;
+  }
+
+  #stack-diagram {
+    cursor: default;
+  }
+
+  .who-travel {
+    opacity: 0;
+  }
+}
+
+.plane {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  width: min(410px, 80%);
+  aspect-ratio: 1.25;
+  padding: 32px;
+  border: 1px solid rgb(255 255 255 / 0.32);
+  border-radius: var(--radius);
+  transform-style: preserve-3d;
+}
+
+.plane span {
+  border: 1px solid rgb(41 121 255 / 0.34);
+  border-radius: 10px;
+}
+
+.plane--rear {
+  transform: translate3d(-38%, -68%, -180px) rotateY(-14deg);
+  opacity: 0.42;
+}
+
+.plane--middle {
+  transform: translate3d(-50%, -50%, -30px) rotateY(-14deg);
+  background: rgb(255 255 255 / 0.04);
+  opacity: 0.68;
+}
+
+.plane--front {
+  display: grid;
+  place-items: center;
+  transform: translate3d(-62%, -30%, 125px) rotateY(-14deg);
+  background: rgb(41 121 255 / 0.1);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+.plane--front strong {
+  color: var(--color-accent);
+  font: 700 60px/1 "Space Grotesk", sans-serif;
+}
+
+
+
+
+
+.how {
+  position: relative;
+  height: 460dvh;
+  padding: 0;
+  background: #07080b;
+  overflow: clip;
+  --slide-accent: #2979ff;
+}
+
+.how:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--slide-accent) 70%, white);
+  outline-offset: -5px;
+}
+
+.how-slider__layout {
+  --mx: 50%;
+  --mxv: 50vw;
+  --my: 50%;
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-columns: minmax(330px, 0.68fr) minmax(580px, 1.45fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: clamp(52px, 6vw, 110px);
+  height: 100dvh;
+  min-height: 0;
+  padding: clamp(118px, 10vw, 160px) 0 52px;
+}
+
+/* Faint blueprint grid on the near-black stage */
+.how-slider__layout::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc(50% - 50vw);
+  background-image:
+    linear-gradient(rgb(90 150 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(90 150 255 / 0.045) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Cursor spotlight — softer than the navy section so the black stays black */
+.how-slider__layout::after {
+  content: "";
+  position: absolute;
+  inset: 0 calc(50% - 50vw);
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    radial-gradient(circle 280px at var(--mxv) var(--my), rgb(41 121 255 / 0.14) 0%, rgb(41 121 255 / 0.05) 40%, transparent 75%),
+    linear-gradient(rgb(90 150 255 / 0.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(90 150 255 / 0.28) 1px, transparent 1px);
+  background-size: 100% 100%, 24px 24px, 24px 24px;
+  -webkit-mask-image: radial-gradient(circle 240px at var(--mxv) var(--my), rgb(0 0 0) 0%, rgb(0 0 0 / 0.55) 45%, transparent 82%);
+  mask-image: radial-gradient(circle 240px at var(--mxv) var(--my), rgb(0 0 0) 0%, rgb(0 0 0 / 0.55) 45%, transparent 82%);
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+
+.how-slider__layout:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .how-slider__layout::after {
+    display: none;
+  }
+}
+
+.how-slider__copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: clamp(8px, 2vw, 30px);
+}
+
+.how-slider__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 34px;
+  margin: 0 0 16px;
+  padding: 0 13px;
+  color: #f5f6f8;
+  background: var(--slide-accent);
+  border-radius: 4px;
+  font: 600 12px/1 "IBM Plex Mono", monospace;
+  letter-spacing: 0.08em;
+  transition: background-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.how-slider__badge span {
+  font-size: 10px;
+}
+
+.how-slider__slides {
+  position: relative;
+  width: 100%;
+  min-height: 240px;
+}
+
+.how-slide {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.how-slide.is-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.how-slide.is-leaving {
+  visibility: visible;
+  pointer-events: none;
+}
+
+.how-slide h3 {
+  max-width: 520px;
+  margin: 0;
+  color: #f0f2f5;
+  font-size: clamp(38px, 3.5vw, 58px);
+  font-weight: 450;
+  line-height: 1.03;
+  letter-spacing: -0.045em;
+}
+
+.how-slide p {
+  max-width: 500px;
+  margin: 18px 0 0;
+  color: #a2a6ad;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.how-slider__controls {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-bottom: 34px;
+}
+
+.how-slider__controls button {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  place-items: center;
+  color: #f5f6f8;
+  background: #26272c;
+  border: 1px solid rgb(255 255 255 / 0.06);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+.how-slider__controls button:hover:not(:disabled),
+.how-slider__controls button:focus-visible:not(:disabled) {
+  color: #08090c;
+  background: var(--slide-accent);
+  transform: translateY(-2px);
+}
+
+.how-slider__controls button:disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+
+.how-slider__controls svg {
+  width: 21px;
+  height: 21px;
+}
+
+.how-slider__visual {
+  position: relative;
+  min-width: 0;
+  min-height: 570px;
+  will-change: transform;
+}
+
+#stack-diagram {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  perspective: 1400px;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+#stack-diagram.is-dragging {
+  cursor: grabbing;
+}
+
+.how-stage {
+  margin-top: -64px;
+  transform-style: preserve-3d;
+  animation: how-float 9s ease-in-out infinite alternate;
+}
+
+@keyframes how-float {
+  from { transform: rotateX(0deg); }
+  to { transform: rotateX(5deg); }
+}
+
+/* 4 square walls in a true 3D ring — no lid, no floor */
+.how-box {
+  --box-size: min(310px, 28vw);
+  --ring-radius: calc(var(--box-size) / 2 + 78px);
+  position: relative;
+  width: var(--box-size);
+  height: var(--box-size);
+  transform-style: preserve-3d;
+  transform: rotateX(-14deg);
+}
+
+.how-panel {
+  position: absolute;
+  inset: 0;
+  border: 1.6px solid rgb(255 255 255 / 0.22);
+  border-radius: 20px;
+  background: rgb(22 34 74 / 0.16);
+  transition: border-color 0.35s ease, background-color 0.35s ease;
+}
+
+/* Mini dot-network per panel (initHowPanelNet): roulette dots + chained
+   lines + couriers, drawn in an SVG layer that rides the panel's 3D pose */
+.how-panel__net {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Screen-space layer for the cross-card arcs (initHowPanelNet) */
+.how-slider__visual {
+  position: relative;
+}
+
+.how-net-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.how-panel[data-panel="0"] { transform: rotateY(0deg) translateZ(var(--ring-radius)); }
+.how-panel[data-panel="1"] { transform: rotateY(90deg) translateZ(var(--ring-radius)); }
+.how-panel[data-panel="2"] { transform: rotateY(180deg) translateZ(var(--ring-radius)); }
+.how-panel[data-panel="3"] { transform: rotateY(270deg) translateZ(var(--ring-radius)); }
+
+/* Dotted chords joining the four wall-centre dots.
+   The chord for the active step brightens, dashes march toward the next
+   wall and a pulse travels along it — same behaviour the old canvas had. */
+.how-link {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--ring-radius) * 1.41421);
+  height: 2px;
+  background-image: repeating-linear-gradient(90deg, rgb(245 247 250 / 0.28) 0 4px, transparent 4px 10px);
+  transform: translate(-50%, -50%) rotateY(var(--la)) translateZ(calc(var(--ring-radius) * 0.70711));
+  opacity: 0.35;
+  transition: opacity 0.35s ease;
+}
+
+.how-link__pulse {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: #8fb4ff;
+  box-shadow: 0 0 9px #8fb4ff;
+  opacity: 0;
+}
+
+.how-diagram[data-step="0"] .how-link[data-link="0"],
+.how-diagram[data-step="1"] .how-link[data-link="1"],
+.how-diagram[data-step="2"] .how-link[data-link="2"],
+.how-diagram[data-step="3"] .how-link[data-link="3"] {
+  background-image: repeating-linear-gradient(90deg, var(--slide-accent) 0 4px, transparent 4px 10px);
+  opacity: 1;
+  animation: how-link-march 0.4s linear infinite;
+}
+
+.how-diagram[data-step="0"] .how-link[data-link="0"] .how-link__pulse,
+.how-diagram[data-step="1"] .how-link[data-link="1"] .how-link__pulse,
+.how-diagram[data-step="2"] .how-link[data-link="2"] .how-link__pulse,
+.how-diagram[data-step="3"] .how-link[data-link="3"] .how-link__pulse {
+  animation: how-link-travel 1.7s linear infinite;
+  animation-delay: var(--pd, 0s);
+}
+
+@keyframes how-link-march {
+  to { background-position-x: 10px; }
+}
+
+@keyframes how-link-travel {
+  0% { left: 0; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { left: calc(100% - 7px); opacity: 0; }
+}
+
+.how-panel__label {
+  position: absolute;
+  z-index: 1; /* stays above the panel's dot-network layer */
+  top: 18px;
+  left: 20px;
+  font: 600 15px "IBM Plex Mono", Consolas, monospace;
+  letter-spacing: 0.07em;
+  color: rgb(245 247 250 / 0.5);
+  transition: color 0.35s ease;
+}
+
+.how-panel__dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--dot);
+  box-shadow: 0 0 12px var(--dot);
+  animation: how-dot-pulse 2.4s ease-in-out infinite;
+  animation-delay: var(--wd, 0s);
+}
+
+.how-panel__dot::before {
+  position: absolute;
+  inset: -4px;
+  border: 1.6px solid var(--dot);
+  border-radius: 50%;
+  animation: how-dot-wave 2.2s ease-out infinite;
+  animation-delay: var(--wd, 0s);
+  content: "";
+}
+
+@keyframes how-dot-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(0.92); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+@keyframes how-dot-wave {
+  0% { transform: scale(1); opacity: 0.5; }
+  70%, 100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* Active step: its wall lights up in the step accent */
+.how-diagram[data-step="0"] .how-panel[data-panel="0"],
+.how-diagram[data-step="1"] .how-panel[data-panel="1"],
+.how-diagram[data-step="2"] .how-panel[data-panel="2"],
+.how-diagram[data-step="3"] .how-panel[data-panel="3"] {
+  border-color: var(--slide-accent);
+  background: rgb(41 121 255 / 0.08);
+  box-shadow: 0 0 34px rgb(41 121 255 / 0.14);
+}
+
+.how-diagram[data-step="0"] .how-panel[data-panel="0"] .how-panel__label,
+.how-diagram[data-step="1"] .how-panel[data-panel="1"] .how-panel__label,
+.how-diagram[data-step="2"] .how-panel[data-panel="2"] .how-panel__label,
+.how-diagram[data-step="3"] .how-panel[data-panel="3"] .how-panel__label {
+  color: rgb(245 247 250 / 0.95);
+}
+
+.how-slider__progress {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 9px;
+  align-self: end;
+}
+
+.how-slider__progress button {
+  position: relative;
+  height: 22px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.how-slider__progress button::before,
+.how-slider__progress button span {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  height: 1px;
+  content: "";
+}
+
+.how-slider__progress button::before {
+  width: 100%;
+  background: rgb(255 255 255 / 0.18);
+}
+
+.how-slider__progress button span {
+  width: 0;
+  background: var(--slide-accent);
+  transition: background-color 0.4s ease;
+}
+
+.how-slider__progress button.is-complete span {
+  width: 100%;
+}
+
+.how-slider__hint {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 82px;
+  margin: 0;
+  color: rgb(255 255 255 / 0.34);
+  font: 500 10px/1 "IBM Plex Mono", monospace;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.stack {
+  z-index: 3;
+  padding: 48px 0 28px;
+  overflow: visible;
+  background: #08090c;
+}
+
+.stack__panel {
+  display: grid;
+  width: calc(100% - 64px);
+  max-width: 1840px;
+  min-height: 730px;
+  margin-inline: auto;
+  padding: 40px;
+  overflow: visible;
+  background: #212228;
+  border: 1px solid rgb(255 255 255 / .035);
+  border-radius: 18px;
+  grid-template-columns: minmax(0, 2.05fr) minmax(360px, .85fr);
+  gap: 26px;
+}
+
+.stack__main {
+  position: relative;
+  min-width: 0;
+  min-height: 648px;
+}
+
+.stack__heading {
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+  padding: 0 0 0 0;
+}
+
+.stack__heading h2 {
+  margin-bottom: 25px;
+  font-size: clamp(38px, 3.15vw, 58px);
+  line-height: 1.07;
+}
+
+.stack__heading p {
+  max-width: 490px;
+  margin: 0;
+  color: #9b9da2;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.stack__media {
+  position: absolute;
+  z-index: 1;
+  inset: 190px 2% 30px 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.stack__diagram {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Per-card hover lift removed — the WHOLE diagram tilts with the pointer
+   instead (initStackTilt). */
+.stack__media {
+  perspective: 1200px;
+}
+
+.stack__diagram {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Arrow trains marching along the stack lanes (Scale-style chevrons).
+   Translate = exactly one chevron spacing along the flow direction, so the
+   loop is seamless. */
+.stack-march {
+  animation: stack-march 0.7s linear infinite;
+}
+
+@keyframes stack-march {
+  to { transform: translate(18.8px, -6.8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack-march {
+    animation: none;
+  }
+}
+
+/* Cluster names floating above each card group (screen-space, no skew) */
+.stack__diagram .stack-cluster-label {
+  font: 500 15px Inter, Arial, sans-serif;
+  letter-spacing: 0.01em;
+  fill: rgb(143 180 255 / 0.92); /* accent blue — tách khỏi line trắng */
+  transition: fill 0.25s ease;
+}
+
+/* Hover một cụm card -> label của cụm đó sáng trắng lên */
+.stack__diagram [data-cluster] {
+  pointer-events: auto;
+}
+
+.stack__diagram .stack-cluster-label.is-lit {
+  fill: #ffffff;
+}
+
+.stack__diagram .stack-ai {
+  font: 700 30px "Space Grotesk", Arial, sans-serif;
+  letter-spacing: 0.02em;
+  filter: drop-shadow(0 0 10px rgb(83 91 255 / 0.55));
+}
+
+.stack-diagram__label {
+  font: 500 12px "IBM Plex Mono", Consolas, monospace;
+  letter-spacing: 0.08em;
+  fill: rgb(245 247 250 / 0.5);
+}
+
+
+.stack__cards {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  min-width: 0;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.stack-card {
+  --mx: 50%;
+  --my: 50%;
+  --card-accent: #2979ff;
+  position: relative;
+  display: flex;
+  min-height: 0;
+  padding: 30px 32px;
+  overflow: hidden;
+  isolation: isolate;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(168deg, rgb(30 34 48 / 0.95) 0%, rgb(17 21 34 / 0.9) 100%);
+  border: 1px solid rgb(255 255 255 / 0.07);
+  border-radius: 14px;
+  transition: transform 0.25s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+.stack-card--cloud { --card-accent: #535bff; }
+.stack-card--models { --card-accent: #7c4dff; }
+
+.stack-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Cursor glow inside the card, tinted per accent */
+.stack-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(circle 240px at var(--mx) var(--my), color-mix(in srgb, var(--card-accent) 20%, transparent) 0%, transparent 72%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Accent hairline that slides in along the top edge */
+.stack-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--card-accent), transparent 70%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stack-card:hover {
+  border-color: color-mix(in srgb, var(--card-accent) 45%, transparent);
+  box-shadow: 0 18px 44px rgb(4 8 22 / 0.5);
+}
+
+.stack-card:hover::after {
+  opacity: 1;
+}
+
+.stack-card:hover::before {
+  transform: scaleX(1);
+}
+
+.stack-card__icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 20px;
+  color: color-mix(in srgb, var(--card-accent) 72%, #fff);
+  background: color-mix(in srgb, var(--card-accent) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--card-accent) 34%, transparent);
+  border-radius: 11px;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.stack-card__icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.stack-card:hover .stack-card__icon {
+  background: color-mix(in srgb, var(--card-accent) 24%, transparent);
+  border-color: color-mix(in srgb, var(--card-accent) 62%, transparent);
+  transform: translateY(-2px);
+}
+
+.stack-card__index {
+  position: absolute;
+  top: 26px;
+  right: 28px;
+  color: color-mix(in srgb, var(--card-accent) 46%, transparent);
+  font-family: "IBM Plex Mono", Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  transition: color 0.3s ease;
+}
+
+.stack-card:hover .stack-card__index {
+  color: color-mix(in srgb, var(--card-accent) 90%, #fff);
+}
+
+.stack-card h3 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.stack-card p {
+  max-width: 460px;
+  margin: 42px 0 0;
+  color: #a4a6ab;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.stack-card--cloud .stack-card--models /* ---------- Trust: three assurances ---------- */
+
+.trust {
+  overflow: clip;
+}
+
+/* Same blueprint grid as the Who section, faded toward the bottom */
+.trust::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgb(41 121 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(41 121 255 / 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0) 0%, rgb(0 0 0 / 0.45) 62%, transparent 100%);
+  mask-image: linear-gradient(to bottom, rgb(0 0 0) 0%, rgb(0 0 0 / 0.45) 62%, transparent 100%);
+  pointer-events: none;
+}
+
+.trust > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.trust__head {
+  max-width: 940px;
+  margin-bottom: clamp(48px, 5vw, 76px);
+}
+
+.trust__head h2 {
+  margin-bottom: 0;
+  font-size: clamp(30px, 3vw, 46px);
+}
+
+.trust__accent {
+  background: linear-gradient(90deg, #2979ff 0%, #535bff 45%, #7c4dff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.trust__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(18px, 1.8vw, 26px);
+}
+
+.trust-card {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(28px, 2.4vw, 38px);
+  background: linear-gradient(168deg, rgb(23 28 42 / 0.92) 0%, rgb(14 23 48 / 0.6) 100%);
+  border: 1px solid rgb(255 255 255 / 0.05);
+  border-radius: var(--radius);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.trust-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Pointer glow, sits above the card fill but under the copy */
+.trust-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(circle 260px at var(--mx) var(--my), rgb(41 121 255 / 0.22) 0%, rgb(83 91 255 / 0.08) 45%, transparent 76%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.trust-card:hover {
+  border-color: rgb(41 121 255 / 0.28);
+  box-shadow: 0 22px 48px rgb(5 10 28 / 0.55);
+  transform: translateY(-6px);
+}
+
+.trust-card:hover::after {
+  opacity: 1;
+}
+
+/* Border spark — one bright core travelling the full perimeter over a faint
+   base line (technique borrowed from the RDAS container-border-animate). */
+@property --trust-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.trust-card::before {
+  --_glow: rgb(41 121 255 / 0.75);
+  --_core: #cfe0ff;
+  --_line: rgb(120 165 255 / 0.16);
+  --_spread: 80deg;
+  --_mid: calc(360deg - var(--_spread) / 2);
+  --_mid2: calc(180deg - var(--_spread) / 2);
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  box-sizing: border-box;
+  padding: 1.5px;
+  border-radius: inherit;
+  background:
+    conic-gradient(
+      from var(--trust-angle),
+      transparent 0deg,
+      transparent calc(180deg - var(--_spread)),
+      var(--_glow) calc(var(--_mid2) - 10deg),
+      var(--_core) var(--_mid2),
+      var(--_glow) calc(var(--_mid2) + 10deg),
+      transparent 180deg,
+      transparent calc(360deg - var(--_spread)),
+      var(--_glow) calc(var(--_mid) - 10deg),
+      var(--_core) var(--_mid),
+      var(--_glow) calc(var(--_mid) + 10deg),
+      transparent 360deg
+    ),
+    linear-gradient(var(--_line) 0 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0.9;
+  pointer-events: none;
+  animation: trust-border-shine 4.2s linear infinite;
+}
+
+.trust-card:nth-child(2)::before { animation-duration: 5.4s; }
+.trust-card:nth-child(3)::before { animation-duration: 6.6s; }
+
+.trust-card:hover::before {
+  opacity: 1;
+}
+
+@keyframes trust-border-shine {
+  to { --trust-angle: 360deg; }
+}
+
+.trust-card__index {
+  position: absolute;
+  top: clamp(24px, 2.2vw, 32px);
+  right: clamp(24px, 2.2vw, 32px);
+  color: rgb(143 180 255 / 0.34);
+  font-family: "IBM Plex Mono", Consolas, monospace;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  transition: color 0.35s ease;
+}
+
+.trust-card:hover .trust-card__index {
+  color: rgb(143 180 255 / 0.8);
+}
+
+.trust-card__icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 26px;
+  color: #8fb4ff;
+  background: rgb(41 121 255 / 0.12);
+  border: 1px solid rgb(41 121 255 / 0.32);
+  border-radius: 12px;
+  transition: background-color 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+}
+
+.trust-card__icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.trust-card:hover .trust-card__icon {
+  background: rgb(41 121 255 / 0.22);
+  border-color: rgb(41 121 255 / 0.6);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.trust-card h3 {
+  margin-bottom: 12px;
+  font-size: 20px;
+}
+
+.trust-card p {
+  margin-bottom: 0;
+  color: rgb(198 203 212 / 0.86);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+@media (max-width: 1024px) {
+  .trust__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .trust__head {
+    margin-bottom: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trust-card::before {
+    animation: none;
+  }
+
+  .trust-card:hover {
+    transform: none;
+  }
+}
+
+.why {
+  --mx: 50%;
+  --my: 50%;
+  z-index: 1;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+.why__copy {
+  position: relative;
+  z-index: 2;
+  padding-bottom: 70px;
+}
+
+.why__copy h2 {
+  max-width: 940px;
+}
+
+.why__copy p {
+  max-width: 680px;
+  margin-bottom: 32px;
+  color: var(--color-muted);
+  font-size: 18px;
+}
+
+.why__media {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  height: clamp(460px, 38vw, 720px);
+  margin-top: 0; /* flush with #trust — no sliver of page bg between the two bands */
+  overflow: hidden;
+  background: #08090c;
+}
+
+/* 28/8: tree SVG replaced by looping video (video_circle_icons_v5.mp4) */
+.why__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Paused at frame 0 until initReveals flips .is-playing on scroll-in, so the
+   sequence always starts from the single seed dot instead of mid-cycle. */
+.why__media:not(.is-playing) .why__diagram,
+.why__media:not(.is-playing) .why__diagram * {
+  animation-play-state: paused;
+}
+
+/* One-frame kill switch: dropping every animation lets the next .is-playing
+   recreate them from 0s, so re-entering the section replays from the seed */
+.why__media.is-resetting .why__diagram,
+.why__media.is-resetting .why__diagram * {
+  animation: none !important;
+}
+
+.why__diagram {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: why-cycle 26s linear infinite;
+}
+
+/* The tree builds up, holds, then the whole thing clears at once and restarts */
+@keyframes why-cycle {
+  0%, 88% { opacity: 1; }
+  93%, 100% { opacity: 0; }
+}
+
+/* 16s loop: only the seed shows at first; each generation's dotted lines
+   wipe outward and the new dots pop in at their far end. Then it repeats.
+   animation-fill-mode: backwards keeps everything hidden during the delay. */
+/* Every animation runs the same 16s period with NO delay — the per-generation
+   staging lives inside generated keyframes (why-wipe-N / why-pop-N-V, emitted
+   in the SVG). Delays desynced from the master cycle on the second loop, which
+   made the whole tree reappear at once instead of restarting from one seed. */
+.why-gen {
+  animation-duration: 26s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.why-gen--seed {
+  animation: none;
+}
+
+/* Punchier glow inside the Why tree than the shared Who/Stack vocabulary */
+.why__diagram .who-dot {
+  filter: drop-shadow(0 0 5px rgb(120 165 255 / 0.8));
+}
+
+.why__diagram .who-wave {
+  animation: why-wave 2.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes why-wave {
+  0% { transform: scale(0.85); opacity: 0.55; }
+  72%, 100% { transform: scale(3); opacity: 0; }
+}
+
+.why-travel {
+  offset-rotate: 0deg;
+  opacity: 0;
+  animation-name: why-travel;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: backwards;
+  filter: drop-shadow(0 0 6px rgb(169 196 255 / 0.95));
+}
+
+@keyframes why-travel {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+/* Nodes drift in a slow, tiny orbit so the tree never feels frozen */
+.why-drift {
+  animation-name: why-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes why-drift {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(4.2px, -3px); }
+  50% { transform: translate(1px, 4.4px); }
+  75% { transform: translate(-4.4px, 1.6px); }
+}
+
+.why-node {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation-duration: 26s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-iteration-count: infinite;
+}
+
+/* Growth pulse: one node seeds the next generation, over and over */
+.why-pulse {
+  offset-rotate: 0deg;
+  opacity: 0;
+  animation: why-pulse linear infinite;
+  filter: drop-shadow(0 0 5px rgb(143 180 255 / 0.85));
+}
+
+@keyframes why-pulse {
+  0% { offset-distance: 0%; opacity: 0; }
+  12% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+.security__head {
+  margin-bottom: 74px;
+}
+
+.security__layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(70px, 10vw, 150px);
+}
+
+.security {
+  --mx: 50%;
+  --my: 50%;
+  overflow: clip;
+}
+
+.security__head,
+.security__layout {
+  position: relative;
+  z-index: 2;
+}
+
+.security__planes {
+  display: grid;
+  place-items: center;
+  min-height: 600px;
+}
+
+.security__diagram {
+  width: min(580px, 100%);
+  height: auto;
+  overflow: visible;
+}
+
+/* Four-beat morph on ONE set of three cards (no cross-fading stages):
+   one card → springs apart into three upright cards in a row → merges back
+   → bursts out into three overlapping circles → collapses. 20s loop.
+   Shape changes ride SVG2 geometry properties (x/y/width/height/rx) so the
+   corners and the icons never distort the way a scale() would. */
+.sec-card,
+.sec-spin,
+.sec-shape,
+.sec-trace,
+.sec-icon {
+  animation-duration: 18s;
+  animation-timing-function: cubic-bezier(0.34, 1.32, 0.4, 1);
+  animation-iteration-count: infinite;
+}
+
+.sec-card__idle {
+  animation: sec-idle 6.4s ease-in-out infinite;
+}
+
+@keyframes sec-idle {
+  0%, 100% { transform: translateY(-5px); }
+  50% { transform: translateY(5px); }
+}
+
+.sec-shape {
+  fill: rgb(41 121 255 / 0.05);
+  stroke: rgb(245 247 250 / 0.32);
+  stroke-width: 1;
+}
+
+/* Spark running the perimeter, whatever shape the card currently holds */
+.sec-trace {
+  fill: none;
+  stroke: #8fb4ff;
+  stroke-width: 1.6;
+  stroke-dasharray: 110 900;
+  filter: drop-shadow(0 0 7px rgb(143 180 255 / 0.9));
+  /* two animations: the geometry morph (20s) plus the marching spark (2.6s);
+     the names/durations are set per card in the SVG's inline styles */
+  animation-timing-function: cubic-bezier(0.34, 1.32, 0.4, 1), linear;
+}
+
+.sec-shape,
+.sec-trace {
+  transform-box: view-box;
+}
+
+@keyframes sec-march {
+  to { stroke-dashoffset: -1010; }
+}
+
+.sec-icon {
+  transform-box: fill-box;
+  transform-origin: center;
+  fill: none;
+  stroke: #8fb4ff;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px rgb(41 121 255 / 0.55));
+}
+
+.sec-icon rect,
+.sec-icon circle,
+.sec-icon path {
+  fill: none;
+  stroke: inherit;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Shockwave fired at each transition */
+.sec-burst {
+  fill: none;
+  stroke: #6ea3ff;
+  stroke-width: 1.4;
+  opacity: 0;
+  animation: sec-burst 18s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sec-card,
+  .sec-card__idle,
+  .sec-spin,
+  .sec-shape,
+  .sec-trace,
+  .sec-icon,
+  .sec-burst {
+    animation: none;
+  }
+
+
+}
+
+
+.security__pillars {
+  display: grid;
+}
+
+.security__pillars article {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.security__pillars article:first-child {
+  padding-top: 0;
+}
+
+.security__pillars svg {
+  margin-bottom: 18px;
+}
+
+.security__pillars h3 {
+  font-size: 22px;
+}
+
+.security__pillars p {
+  max-width: 650px;
+  margin-bottom: 0;
+  color: var(--color-text);
+  font-size: 15px;
+}
+
+.final-cta {
+  --mx: 50%;
+  --my: 50%;
+  overflow: clip;
+  text-align: center;
+}
+
+.final-cta > .container {
+  position: relative;
+  z-index: 2;
+}
+
+.final-cta h2 {
+  max-width: 680px;
+  margin-inline: auto;
+  font-size: clamp(30px, 3.4vw, 50px);
+}
+
+.site-footer {
+  position: relative;
+  padding: clamp(64px, 7vw, 92px) 0 28px;
+  background: #08090c;
+  border-top: 1px solid var(--color-border);
+  overflow: clip;
+}
+
+/* Hairline accent + a soft brand glow bleeding up from the fold */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(41 121 255 / 0.55) 22%, rgb(124 77 255 / 0.5) 60%, transparent);
+}
+
+.site-footer::after {
+  content: "";
+  position: absolute;
+  top: -190px;
+  left: 50%;
+  width: min(1100px, 120%);
+  height: 380px;
+  background: radial-gradient(ellipse at center, rgb(41 121 255 / 0.14) 0%, transparent 68%);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.site-footer > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(48px, 8vw, 140px);
+  padding-bottom: 56px;
+}
+
+.site-footer__brand p {
+  max-width: 420px;
+  margin: 20px 0 26px;
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.site-footer__heading {
+  margin-bottom: 18px;
+  color: rgb(143 180 255 / 0.85);
+  font: 500 11px/1 "IBM Plex Mono", Consolas, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.site-footer__nav {
+  display: grid;
+  align-content: start;
+  gap: 13px;
+}
+
+.site-footer__nav a {
+  position: relative;
+  width: fit-content;
+  padding-left: 0;
+  transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.site-footer__nav a::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-accent);
+  transition: width 0.2s ease;
+}
+
+.site-footer__nav a:hover {
+  padding-left: 18px;
+}
+
+.site-footer__nav a:hover::before {
+  width: 12px;
+}
+
+.site-footer__social {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer__social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  color: var(--color-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.site-footer__social a:hover {
+  color: var(--color-on-secondary);
+  background: rgb(41 121 255 / 0.16);
+  border-color: rgb(41 121 255 / 0.55);
+  transform: translateY(-2px);
+}
+
+.site-footer__social svg {
+  width: 16px;
+  height: 16px;
+}
+
+.site-footer__bottom {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+  padding-top: 24px;
+  color: var(--color-muted);
+  border-top: 1px solid var(--color-border);
+  font: 11px/1.5 "IBM Plex Mono", monospace;
+  text-transform: uppercase;
+}
+
+.whatsapp-button-shell {
+  position: fixed;
+  right: var(--floating-action-right);
+  bottom: calc(var(--floating-action-bottom) + env(safe-area-inset-bottom));
+  z-index: 98;
+  width: var(--whatsapp-size);
+  height: var(--whatsapp-size);
+  transition: transform 0.22s ease;
+}
+
+body.back-to-top-visible .whatsapp-button-shell {
+  transform: translateY(calc(-1 * (var(--back-to-top-size) + var(--floating-gap))));
+}
+
+#whatsapp__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--whatsapp-size);
+  height: var(--whatsapp-size);
+  color: #f8fffb;
+  background: #25d366;
+  border-radius: 50%;
+  animation: whatsapp-wave 1s linear infinite;
+}
+
+#whatsapp__button svg {
+  width: 62%;
+  height: 62%;
+}
+
+#back-to-top-button {
+  position: fixed;
+  right: calc(var(--floating-action-right) + (var(--whatsapp-size) - var(--back-to-top-size)) / 2);
+  bottom: calc(var(--floating-action-bottom) + env(safe-area-inset-bottom));
+  z-index: 97;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--back-to-top-size);
+  height: var(--back-to-top-size);
+  padding: 0;
+  color: var(--color-on-secondary);
+  background: var(--color-secondary);
+  border: 1px solid rgb(255 255 255 / 0.28);
+  border-radius: 50%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease, background-color 0.2s ease;
+}
+
+#back-to-top-button svg {
+  width: 50%;
+  height: 50%;
+}
+
+body.back-to-top-visible #back-to-top-button {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#back-to-top-button:hover {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+@keyframes whatsapp-wave {
+  from { box-shadow: 0 0 0 0 rgb(37 211 102 / 0.42); }
+  to { box-shadow: 0 0 0 10px rgb(37 211 102 / 0); }
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.reveal,
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.reveal-stagger.is-revealed > * {
+  opacity: 1;
+  transform: none;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    --whatsapp-size: 40px;
+    --back-to-top-size: 32px;
+  }
+
+  h1 { font-size: 44px; }
+  h2 { font-size: 36px; }
+  h3 { font-size: 22px; }
+
+  .desktop-nav,
+  .desktop-cta {
+    display: none;
+  }
+
+  .site-header__inner {
+    grid-template-columns: 1fr auto;
+  }
+
+  .menu-toggle,
+  .drawer-close {
+    display: inline-flex;
+  }
+
+  .who__grid,
+  .security__layout {
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+  }
+
+  .security__planes {
+    min-height: 460px;
+  }
+
+  .security__diagram {
+    width: min(420px, 100%);
+  }
+
+  .how-slider__layout {
+    grid-template-columns: minmax(280px, 0.72fr) minmax(440px, 1.28fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    column-gap: 34px;
+  }
+
+  .how-slider__visual {
+    min-height: 500px;
+  }
+
+  .how-slide h3 {
+    font-size: clamp(36px, 4.4vw, 48px);
+  }
+
+  .stack__panel {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .stack__main {
+    min-height: 520px;
+  }
+
+  .stack__cards {
+    grid-template-rows: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .stack__diagram .stack-cluster-label {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --gutter: 20px;
+    --header-height: 64px;
+    --floating-action-right: 16px;
+    --floating-action-bottom: calc(16px + var(--mobile-navigation-bar-height));
+    --whatsapp-size: 32px;
+    --back-to-top-size: 28px;
+  }
+
+  h1 { font-size: 40px; }
+  h2 { font-size: 32px; }
+  h3 { font-size: 20px; }
+
+  .site-header__inner {
+    grid-template-columns: 1fr auto;
+    width: calc(100% - 32px);
+  }
+
+  .desktop-nav,
+  .desktop-cta {
+    display: none;
+  }
+
+  .menu-toggle,
+  .drawer-close {
+    display: inline-flex;
+  }
+
+  .section {
+    padding: 88px 0;
+  }
+
+  /* 27/8: mobile chạy canvas như desktop — các override dưới đây chỉ còn
+     áp cho chế độ static (reduced-motion / không có WebGL). */
+  .pull-apart[data-mode="static"] {
+    height: auto;
+    min-height: 0;
+  }
+
+  .pull-apart[data-mode="static"] .pull-apart__stage {
+    display: grid;
+    min-height: 980px;
+    padding: 90px 0 80px;
+    grid-template-rows: auto minmax(430px, 1fr) auto;
+  }
+
+  .pull-apart[data-mode="static"] .pull-apart__canvas {
+    display: none;
+  }
+
+  .pull-apart[data-mode="static"] .pull-apart__copy,
+  .pull-apart[data-mode="static"] .pull-apart__next-copy {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    width: calc(100% - 40px);
+    margin-inline: auto;
+    opacity: 1;
+    transform: none;
+  }
+
+  .pull-apart[data-mode="static"] .pull-apart__copy {
+    grid-row: 1;
+  }
+
+  .pull-apart[data-mode="static"] .pull-apart__next-copy {
+    grid-row: 3;
+  }
+
+  .pull-apart__copy h1,
+  .pull-apart__copy h2,
+  .pull-apart__next-copy h2 {
+    font-size: 32px;
+  }
+
+  .pull-apart[data-mode="static"] .pull-apart__fallback {
+    position: relative;
+    grid-row: 2;
+    display: grid;
+    min-height: 430px;
+  }
+
+  .pull-apart__fallback-network {
+    width: 100%;
+    max-width: none;
+  }
+
+  .who__grid,
+  .security__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .who__visual {
+    min-height: 370px;
+  }
+
+  .who__copy {
+    grid-row: 1;
+  }
+
+  .who__visual {
+    grid-row: 2;
+  }
+
+
+
+  .how {
+    height: 460dvh;
+    padding: 0;
+  }
+
+  .how-slider__layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    height: 100dvh;
+    min-height: 0;
+    padding: 92px 0 26px;
+  }
+
+  .how-slider__copy {
+    min-height: 320px;
+    padding-top: 0;
+  }
+
+  .how-slider__slides {
+    min-height: 220px;
+  }
+
+  .how-slide h3 {
+    font-size: clamp(38px, 10vw, 50px);
+  }
+
+  .how-slider__controls {
+    margin-top: 18px;
+    padding-bottom: 0;
+  }
+
+  .how-slider__visual {
+    min-height: 0;
+    margin: 12px -14px 0;
+  }
+
+  .how-slider__progress {
+    grid-row: 3;
+    margin-top: 18px;
+  }
+
+  .how-slider__hint {
+    display: none;
+  }
+
+  /* 31/8 mobile: khung carousel to ra, chữ trên panel nhỏ lại, các card
+     trong vòng xoay sát nhau hơn */
+  .how-box {
+    --box-size: min(300px, 60vw);
+    --ring-radius: calc(var(--box-size) / 2 + 34px);
+  }
+
+  .how-panel__label {
+    font-size: 11px;
+  }
+
+  .stack__panel {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    width: calc(100% - 24px);
+    padding: 18px;
+    overflow: hidden;
+    border-radius: 14px;
+    gap: 18px;
+  }
+
+  .stack__main {
+    min-height: 420px;
+  }
+
+  .stack__heading h2 {
+    font-size: 36px;
+  }
+
+  .stack__heading p br {
+    display: none;
+  }
+
+  /* 31/8: diagram giờ cao (~1.65:1) — nới vùng media + phóng label để đọc
+     được trên màn hẹp */
+  .stack__media {
+    inset: 200px 0 10px -12%; /* 31/8: dồn hình sang trái, thẳng mép heading */
+  }
+
+  .stack__main {
+    min-height: 560px;
+  }
+
+  .stack__diagram .stack-cluster-label {
+    font-size: 19px; /* 31/8: nhỏ lại để label không đè nhau/tràn mép */
+  }
+
+  .sd-card:hover rect {
+    transform: none;
+    filter: none;
+  }
+
+  .stack__cards {
+    grid-template-rows: repeat(3, minmax(190px, auto));
+  }
+
+  .stack-card {
+    padding: 26px 24px;
+  }
+
+  .stack-card:hover {
+    transform: none;
+  }
+
+  .why__media {
+    height: 300px;
+    margin-top: 0;
+  }
+
+  /* preserveAspectRatio="none" already stretches the tree to the viewport,
+     so show all of it rather than cropping the seed off the left edge */
+  .why__diagram {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+  }
+
+  /* Drop the two densest generations on phones: ~96 nodes and ~96 travelling
+     dots fewer to animate, and they were unreadable at this size anyway. */
+  .why__diagram > g:nth-of-type(n+6) {
+    display: none;
+  }
+
+  .trust__head h2 {
+    font-size: 26px;
+  }
+
+  .trust__head h2 br {
+    display: none;
+  }
+
+  .trust-card {
+    padding: 24px 22px;
+  }
+
+  .trust-card h3 {
+    font-size: 18px;
+  }
+
+  .trust-card__index {
+    top: 20px;
+    right: 20px;
+  }
+
+  .trust-card:hover {
+    transform: none;
+  }
+
+  .final-cta h2 {
+    font-size: 28px;
+  }
+
+  .security__planes {
+    min-height: 340px;
+  }
+
+  .security__diagram {
+    width: min(360px, 100%);
+  }
+
+  .security__pillars article:first-child {
+    padding-top: 28px;
+  }
+
+  .site-footer__grid {
+    grid-template-columns: 1fr;
+    gap: 42px;
+    padding-bottom: 40px;
+  }
+
+  .site-footer__brand p {
+    margin: 16px 0 22px;
+  }
+
+  .site-footer__bottom {
+    display: grid;
+    gap: 16px;
+    justify-items: start;
+  }
+
+  /* comfortable touch targets */
+  .site-footer__social a {
+    width: 38px;
+    height: 38px;
+  }
+
+  .site-footer__social svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .button-shine::after {
+    display: none;
+  }
+
+  .reveal,
+  .reveal-stagger > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  .pull-apart {
+    height: auto;
+    min-height: 0;
+  }
+
+  .pull-apart__stage {
+    display: grid;
+    min-height: 980px;
+    padding: 90px 0 80px;
+    grid-template-rows: auto minmax(430px, 1fr) auto;
+  }
+
+  .pull-apart__canvas {
+    display: none;
+  }
+
+  .pull-apart__copy,
+  .pull-apart__next-copy {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    width: min(900px, calc(100% - 40px));
+    margin-inline: auto;
+    opacity: 1;
+    transform: none;
+  }
+
+  .pull-apart__fallback {
+    position: relative;
+    display: grid;
+    min-height: 430px;
+  }
+
+  .how {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .how-slider__layout {
+    position: relative;
+    height: auto;
+    min-height: 100dvh;
+  }
+
+}

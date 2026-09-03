@@ -8,7 +8,7 @@ const INTRO_COPY = Object.freeze({
 });
 
 const NEXT_COPY = Object.freeze({
-  heading: 'Secondhuman.ai bridges the gap between AI models & business outcomes.',
+  heading: 'SecondHuman.ai bridges the gap between AI models & business outcomes.',
   supporting: 'We are determined to build radically more profitable businesses with you.',
 });
 

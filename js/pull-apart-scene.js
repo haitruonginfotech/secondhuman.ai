@@ -371,7 +371,7 @@ class PullApartScene {
     ];
     // Wireframe box (12 dotted edges) that assembles in scroll 6-10;
     // lives in the network group so dragging spins box + contents together
-    const HW = 2.9; const HH = 1.55; const HD = 1.55;
+    const HW = 4.6; const HH = 1.7; const HD = 2.1; // 1/9: rộng, nhưng thấp lại để không đè text
     const corners = [];
     for (let zi = -1; zi <= 1; zi += 2) {
       for (let yi = -1; yi <= 1; yi += 2) {
@@ -526,8 +526,9 @@ class PullApartScene {
     // face dot hooks to a random frame anchor, plus assorted cross links
     for (let i = 20; i < spokePts.length; i += 1) {
       addTrace(spokePts[i], spokePts[Math.floor(spokeRandom() * 20)]);
+      addTrace(spokePts[i], spokePts[Math.floor(spokeRandom() * 20)]);
     }
-    for (let k = 0; k < 14; k += 1) {
+    for (let k = 0; k < 72; k += 1) {
       const i = Math.floor(spokeRandom() * spokePts.length);
       let j = Math.floor(spokeRandom() * spokePts.length);
       if (j === i) j = (j + 7) % spokePts.length;
@@ -542,14 +543,28 @@ class PullApartScene {
       const seg = (dTarget - tracePath.cum[k - 1]) / Math.max(tracePath.cum[k] - tracePath.cum[k - 1], 1e-6);
       return new THREE.Vector3().lerpVectors(tracePath.pts[k - 1], tracePath.pts[k], seg);
     };
-    for (let i = 0; i < 26; i += 1) {
-      const tracePath = this.spokePaths[Math.floor(spokeRandom() * this.spokePaths.length)];
+    // giữ khoảng cách tối thiểu giữa mọi chấm trắng — không cho dính chùm
+    const placedDots = spokePts.map((pt) => new THREE.Vector3(pt[0], pt[1], pt[2]));
+    const MIN_DOT_GAP2 = 0.55 * 0.55;
+    for (let i = 0; i < 60; i += 1) {
+      let pos = null;
+      for (let attempt = 0; attempt < 30 && !pos; attempt += 1) {
+        const tracePath = this.spokePaths[Math.floor(spokeRandom() * this.spokePaths.length)];
+        const cand = sampleAt(tracePath, 0.2 + spokeRandom() * 0.7);
+        let clear = true;
+        for (let q = 0; q < placedDots.length; q += 1) {
+          if (cand.distanceToSquared(placedDots[q]) < MIN_DOT_GAP2) { clear = false; break; }
+        }
+        if (clear) pos = cand;
+      }
+      if (!pos) continue;
+      placedDots.push(pos);
       const material = new THREE.SpriteMaterial({
         map: anchorTexture, transparent: true, opacity: 0, depthWrite: false,
       });
       const sprite = new THREE.Sprite(material);
       sprite.scale.setScalar(0.15);
-      sprite.position.copy(sampleAt(tracePath, 0.25 + spokeRandom() * 0.6));
+      sprite.position.copy(pos);
       sprite.renderOrder = 3;
       this.boxAnchors.add(sprite);
       this.boxAnchorMaterials.push(material);
@@ -567,7 +582,7 @@ class PullApartScene {
     // white dots — same look/speed as the scroll-1 chain couriers
     this.spokeRunnerTexture = makeSolidDotTexture('#8fb4ff');
     this.spokeRunners = [];
-    for (let slot = 0; slot < 48; slot += 1) {
+    for (let slot = 0; slot < 84; slot += 1) {
       const material = new THREE.SpriteMaterial({
         map: this.spokeRunnerTexture, transparent: true, opacity: 0, depthWrite: false,
       });
@@ -575,7 +590,7 @@ class PullApartScene {
       sprite.scale.setScalar(0.06);
       sprite.renderOrder = 4;
       this.network.add(sprite);
-      this.spokeRunners.push({ sprite, material, slot, cycleSeconds: 0.9, offset: slot * 0.17 });
+      this.spokeRunners.push({ sprite, material, slot, cycleSeconds: 1.35, offset: slot * 0.23 });
     }
     // Fixed constellation STUCK TO the six faces of the box: every dot sits
     // on a face plane, and connectors only run between dots on the same face
@@ -962,8 +977,8 @@ class PullApartScene {
     // Camera + root drift — on narrow (mobile) viewports the camera backs off
     // so the label field and the box always fit the screen width
     const aspectFit = Math.max(1, Math.min(2, 1.7 / (this.camera.aspect || 1)));
-    this.camera.position.z = (7.2 + (15.6 - 7.2) * pull) * aspectFit;
-    this.root.position.y = -0.32 + (0.3 - -0.32) * boxForm;
+    this.camera.position.z = (7.2 + (13.8 - 7.2) * pull) * aspectFit;
+    this.root.position.y = -0.32 + (0.42 - -0.32) * boxForm; // nhấc khối lên khỏi text
 
     // Scroll 2: logo steps down to ~55%; in the box phase it swells back up
     const cardScale = (1 - 0.45 * logoShrink) * (1 + 1.6 * boxForm);
@@ -1014,7 +1029,7 @@ class PullApartScene {
     }
     // Scroll 6-10: the wireframe box assembles around the network
     if (this.boxEdges) {
-      const edgePhase = smoothstep(0.52, 0.58, p);
+      const edgePhase = smoothstep(0.52, 0.68, p); // chấm trắng hiện dần theo khung
       // The frame draws itself stroke by stroke (continuing the XY-line
       // drawing feel) instead of fading in
       const boxDraw = smoothstep(0.46, 0.58, p);
@@ -1057,7 +1072,7 @@ class PullApartScene {
         const es = this.boxEdges.scale.x;
         const spread = smoothstep(0.56, 0.72, p);
         this.centerSpokes.scale.setScalar(Math.max(es * spread, 0.0001));
-        this.centerSpokes.material.opacity = 0.16 * smoothstep(0.56, 0.6, p);
+        this.centerSpokes.material.opacity = 0.08 * smoothstep(0.56, 0.6, p); // 1/9: nhạt bớt
         this.centerSpokes.visible = spread > 0.001;
         if (this.spokeRunners && this.spokePaths.length) {
           // couriers: each slot repicks a random trace every cycle and rides
@@ -1229,7 +1244,7 @@ class PullApartScene {
       const launchPop = 1;
       const introVis = node.introOn;
       if (introVis > 0.5) visibleIdx.push(nodeIndex);
-      const nodeVisN = introVis * (1 - boxForm);
+      const nodeVisN = introVis * (1 - smoothstep(0.3, 0.44, p)); // tan sớm, nhường sân cho hộp
       node.burstT = bN;
       const driftT = elapsed * node.driftSpeed + node.driftPhase;
       const driftAmp = node.driftAmp * 0.5 * (1 - boxForm) * nodeVisN;

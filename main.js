@@ -133,6 +133,41 @@ function initStackTilt() {
   });
 }
 
+
+function initStackLoopReveal() {
+  // Vòng đáy (line + courier) ẩn lúc đầu; khi các dot trên chuỗi chạy về
+  // tới logo (sau ~1 chu kỳ chuỗi) thì mới xuất hiện.
+  const section = document.querySelector('#your-stack');
+  const parts = document.querySelectorAll('.stack-loop-piece');
+  if (!section || !parts.length) return;
+  let done = false;
+  const observer = new IntersectionObserver(([entry]) => {
+    if (!entry.isIntersecting || done) return;
+    done = true;
+    setTimeout(() => {
+      // line VẼ LAN dần từ phía logo về card 1 (draw-on), xong mới thả courier
+      const path = document.querySelector('path.stack-loop-piece');
+      if (path && path.getTotalLength) {
+        const len = path.getTotalLength();
+        path.classList.remove('stack-loop-hidden');
+        path.style.strokeDasharray = String(len);
+        path.style.strokeDashoffset = String(-len);
+        path.getBoundingClientRect();
+        path.style.transition = 'stroke-dashoffset 1.1s ease-out';
+        path.style.strokeDashoffset = '0';
+        setTimeout(() => {
+          path.style.transition = '';
+          path.style.strokeDasharray = '';
+          path.style.strokeDashoffset = '';
+        }, 1200);
+      }
+      setTimeout(() => parts.forEach((el) => el.classList.remove('stack-loop-hidden')), 1150);
+    }, 2300);
+    observer.disconnect();
+  }, { threshold: 0.3 });
+  observer.observe(section);
+}
+
 function initStackLabelHover() {
   // Hover a card cluster -> its floating label brightens to white
   const svg = document.querySelector('.stack__diagram');
@@ -201,7 +236,7 @@ function initWhoDotRoulette() {
       const path = document.createElementNS(SVG_NS, 'path');
       path.setAttribute('d', `M ${CORE.x} ${CORE.y} Q ${ctrl.x.toFixed(1)} ${ctrl.y.toFixed(1)} ${to.x} ${to.y}`);
       linesGroup.appendChild(path);
-      funnelOut.push({ ctrl, to, couriers: makeCouriers(2, 0.55) });
+      funnelOut.push({ ctrl, to, couriers: makeCouriers(2, 0.38) });
     }
     line.remove();
   });
@@ -225,8 +260,8 @@ function initWhoDotRoulette() {
     slots.push({
       group, path, wave, dot,
       at: { x: 0, y: 0 }, ctrl: { x: 0, y: 0 },
-      couriers: makeCouriers(2, 0.9),
-      cycle: 1.05 + (i % 5) * 0.14, // fast toggle: ~1.1-1.6s per cycle
+      couriers: makeCouriers(2, 0.6),
+      cycle: 1.7 + (i % 5) * 0.22, // chậm lại xíu
       offset: (i * 0.37) % 1,
       epoch: -1, on: false,
     });
@@ -317,7 +352,7 @@ function initSpotlights() {
   return;
   /* eslint-disable no-unreachable */
   if (!finePointer.matches) return;
-  document.querySelectorAll('.who, .how-slider__layout, .trust-card, .stack-card, .security, .final-cta, .why').forEach((element) => {
+  document.querySelectorAll('.who, .how-slider__layout, .trust-card, .stack-card, .own-card, .security, .final-cta, .why').forEach((element) => {
     const move = (event) => {
       const rect = element.getBoundingClientRect();
       element.style.setProperty('--mx', `${(event.clientX - rect.left).toFixed(1)}px`);
@@ -743,7 +778,6 @@ function initHowPanelNet() {
   arcGroup.setAttribute('fill', 'none');
   arcGroup.setAttribute('stroke', 'rgba(245,247,250,0.3)');
   arcGroup.setAttribute('stroke-width', '1');
-  arcGroup.setAttribute('stroke-dasharray', '3 6');
   overlay.appendChild(arcGroup);
   const DOTS = 16;
   const arcs = [];
@@ -755,7 +789,7 @@ function initHowPanelNet() {
       courier.setAttribute('r', '2.2');
       courier.setAttribute('fill', '#4f7fe0');
       overlay.appendChild(courier);
-      return { el: courier, phase: ((i * 0.37) + k * 0.5) % 1, speed: 0.85 + ((i + k) % 4) * 0.12 };
+      return { el: courier, phase: ((i * 0.37) + k * 0.5) % 1, speed: 0.6 + ((i + k) % 4) * 0.09 };
     });
     arcs.push({ path, couriers });
   }
@@ -774,7 +808,7 @@ function initHowPanelNet() {
       svg.appendChild(dot);
       dots.push({
         el: dot, fx: 0.5, fy: 0.5, on: false, epoch: -1, shown: false,
-        cycle: 0.95 + (i % 4) * 0.13, // fast roulette
+        cycle: 1.4 + (i % 4) * 0.18, // chậm lại xíu
         offset: (i * 0.41) % 1,
       });
     }
@@ -907,7 +941,7 @@ function initReveals() {
 }
 
 async function init() {
-  initShell(); initWhoTilt(); initStackTilt(); initStackLabelHover(); initWhoDotRoulette(); initCardTilt(); initSpotlights(); await initPullApart(); initHow(); initHowPanelNet(); initReveals(); initDeferredLoops();
+  initShell(); initWhoTilt(); initStackTilt(); initStackLabelHover(); initStackLoopReveal(); initWhoDotRoulette(); initCardTilt(); initSpotlights(); await initPullApart(); initHow(); initHowPanelNet(); initReveals(); initDeferredLoops();
   requestAnimationFrame(() => ScrollTrigger.refresh());
 }
 window.addEventListener('pagehide', () => cleanups.forEach((cleanup) => cleanup()), { once: true });

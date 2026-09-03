@@ -2386,7 +2386,7 @@ main section[id] {
 .sec-shape,
 .sec-trace,
 .sec-icon {
-  animation-duration: 18s;
+  animation-duration: 12s;
   animation-timing-function: cubic-bezier(0.34, 1.32, 0.4, 1);
   animation-iteration-count: infinite;
 }
@@ -2452,7 +2452,7 @@ main section[id] {
   stroke: #6ea3ff;
   stroke-width: 1.4;
   opacity: 0;
-  animation: sec-burst 18s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  animation: sec-burst 12s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3442,7 +3442,11 @@ body.back-to-top-visible #back-to-top-button {
 }
 
 .own-card:hover {
-  background: color-mix(in srgb, var(--card-accent) 7%, var(--color-surface-raised));
+  /* 1/9: glow xanh bám theo con trỏ thay vì phủ đều cả card */
+  background:
+    radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in srgb, var(--card-accent) 13%, transparent), transparent 72%),
+    var(--color-surface-raised);
   border-color: color-mix(in srgb, var(--card-accent) 45%, transparent);
 }
 
@@ -3499,4 +3503,122 @@ body.back-to-top-visible #back-to-top-button {
   .own-card p {
     margin-top: 18px;
   }
+}
+
+
+/* 1/9: cỡ chữ outro positioning theo yêu cầu client; heading luôn 1 hàng
+   (font tự co theo bề ngang màn để không bao giờ xuống hàng) */
+.pull-apart__next-copy {
+  width: max-content;
+  max-width: calc(100% - 24px);
+}
+
+.pull-apart__next-copy h2 {
+  white-space: nowrap;
+  font-size: min(36px, 2.55vw);
+}
+
+.pull-apart__next-copy p {
+  font-size: 28px;
+}
+
+@media (max-width: 1024px) {
+  .pull-apart__next-copy h2 {
+    font-size: min(32px, 2.55vw);
+  }
+
+  .pull-apart__next-copy p {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .pull-apart__next-copy h2 {
+    font-size: min(28px, 2.5vw);
+  }
+
+  .pull-apart__next-copy p {
+    font-size: 20px;
+  }
+}
+
+
+/* 1/9: logo thật thay placeholder — full show, không padding */
+.who__logo {
+  background: #ffffff;
+  padding: 0;
+  overflow: hidden;
+}
+
+.who__logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.75;
+  transition: filter 0.25s ease, opacity 0.25s ease;
+}
+
+.who__logo:hover img {
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+
+/* 1/9: câu đầu đoạn stack giữ 1 hàng trên desktop/tablet */
+.stack__heading p,
+.stack__heading div {
+  max-width: none;
+}
+
+.nowrap-line {
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .nowrap-line {
+    white-space: normal;
+  }
+}
+
+
+/* 1/9: vòng đáy stack ẩn lúc đầu, chỉ hiện khi dot chạy về tới logo */
+.stack-loop-hidden {
+  visibility: hidden;
+}
+
+
+/* 1/9: giảm khoảng đen giữa Best-in-Business và Why section */
+.why {
+  padding-top: 80px;
+}
+
+@media (max-width: 1024px) {
+  .why {
+    padding-top: 60px;
+  }
+}
+
+@media (max-width: 767px) {
+  .why {
+    padding-top: 40px;
+  }
+}
+
+.section.stack {
+  padding-bottom: 36px;
+}
+
+
+/* 1/9: bỏ khoảng rỗng giữa title và mô tả trong own-card — text đi liền
+   ngay dưới heading */
+.own-card {
+  min-height: 200px;
+  justify-content: flex-start;
+  gap: 14px;
+}
+
+.own-card--models {
+  min-height: 150px;
 }
